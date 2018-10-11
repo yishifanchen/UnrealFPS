@@ -102,7 +102,7 @@ namespace UnrealFPS
             bool wasWalking = isWalking;
             isWalking = !Input.GetKey(KeyCode.LeftShift);
 
-            //设置步行或跑步所需的速度
+            //设置步行或跑步所需的速度 
             walkSpeed = wasWalkSpeed;
             speed = (isWalking || (vertical < 0) || (horizontal != 0)) ? walkSpeed : runSpeed;
             input = new Vector2(horizontal,vertical);
@@ -119,6 +119,13 @@ namespace UnrealFPS
         private void RotateView()
         {
             mouseLook.LookRotation(transform, cam.transform);
+        }
+        public bool IsRunning
+        {
+            get
+            {
+                return fpSpeed == runSpeed ? true : false;
+            }
         }
     }
 }
