@@ -33,6 +33,18 @@ namespace UnrealFPS
                 animator.SetFloat("Speed",speed);
                 animator.SetFloat("Direction", direction);
             }
+
+            animator.SetBool("IsCrouching",controller.FPCrouch.IsCrouch);
+            float fixedVerticalPosition;
+            if(controller.FPCrouch.IsCrouch)
+                fixedVerticalPosition = Mathf.MoveTowards(transform.localPosition.y,crouch_Y,7*Time.deltaTime);
+            else
+                fixedVerticalPosition = Mathf.MoveTowards(transform.localPosition.y, default_Y, 7 * Time.deltaTime);
+            transform.localPosition = new Vector3(transform.localPosition.x,fixedVerticalPosition,transform.localPosition.z);
+        }
+        private void OnAnimatorIK(int layerIndex)
+        {
+            
         }
     }
 }

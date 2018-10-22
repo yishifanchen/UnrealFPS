@@ -662,6 +662,10 @@ MonoBehaviour:
     smooth: 1
     lockCursor: 1
     cursorIsLocked: 1
+  fPCrouch:
+    speed: 2
+    smooth: 5
+    crouchHeight: 0.5
 --- !u!1 &708519217
 GameObject:
   m_ObjectHideFlags: 0
@@ -933,8 +937,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3b1f96da15f9542b1caec525e259dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  default_Y: 0
-  crouch_Y: 0
+  default_Y: -1.1
+  crouch_Y: -0.55
 --- !u!1 &1198346981
 GameObject:
   m_ObjectHideFlags: 0

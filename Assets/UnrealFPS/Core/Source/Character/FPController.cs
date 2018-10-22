@@ -25,6 +25,7 @@ namespace UnrealFPS
         [SerializeField]private float gravityMutiplier;
         [SerializeField]private Camera cam;
         [SerializeField]private NGMouseLook mouseLook;
+        [SerializeField] private FPCrouch fPCrouch=new FPCrouch();
 
         private bool lockMovement;
         private float fpSpeed;
@@ -47,11 +48,14 @@ namespace UnrealFPS
             audioSource = GetComponent<AudioSource>();
             rigid = GetComponent<Rigidbody>();
             mouseLook.Init(transform,cam.transform);
+            fPCrouch.Init(transform, characterController);
         }
         protected virtual void Update()
         {
             if (lockMovement) return;//如果锁定移动，直接返回
             RotateView();
+
+            fPCrouch.UpdateCrouch();
             if (!jump)
             {
                 jump = Input.GetButtonDown("Jump");
@@ -103,8 +107,8 @@ namespace UnrealFPS
             isWalking = !Input.GetKey(KeyCode.LeftShift);
 
             //设置步行或跑步所需的速度 
-            walkSpeed = wasWalkSpeed;
-            speed = (isWalking || (vertical < 0) || (horizontal != 0)) ? walkSpeed : runSpeed;
+            walkSpeed = fPCrouch.IsCrouch?fPCrouch.Speed:wasWalkSpeed;
+            speed = (isWalking || (vertical < 0) || (horizontal != 0)||fPCrouch.IsCrouch) ? walkSpeed : runSpeed;
             input = new Vector2(horizontal,vertical);
             fpSpeed = speed;
             //如果组合长度超过1，则输入正常化
@@ -122,10 +126,11 @@ namespace UnrealFPS
         }
         public bool IsRunning
         {
-            get
-            {
-                return fpSpeed == runSpeed ? true : false;
-            }
+            get { return fpSpeed == runSpeed ? true : false; }
+        }
+        public FPCrouch FPCrouch
+        {
+            get { return fPCrouch; }
         }
     }
 }
