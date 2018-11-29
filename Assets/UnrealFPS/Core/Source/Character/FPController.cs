@@ -25,7 +25,8 @@ namespace UnrealFPS
         [SerializeField]private float gravityMutiplier;
         [SerializeField]private Camera cam;
         [SerializeField]private NGMouseLook mouseLook;
-        [SerializeField] private FPCrouch fPCrouch=new FPCrouch();
+        [SerializeField]private FPCrouch fPCrouch=new FPCrouch();
+        [SerializeField] private PickupWeapon pickupWeapon = new PickupWeapon();
 
         private bool lockMovement;
         private float fpSpeed;
@@ -36,6 +37,7 @@ namespace UnrealFPS
         private Vector2 input;
         private Vector3 moveDir = Vector3.zero;
         private Vector3 originalCameraPosition;
+        private PlayerInventory playerInventory;
         private AudioSource audioSource;
         private CharacterController characterController;
         private Rigidbody rigid;
@@ -47,8 +49,10 @@ namespace UnrealFPS
             characterController = GetComponent<CharacterController>();
             audioSource = GetComponent<AudioSource>();
             rigid = GetComponent<Rigidbody>();
+            playerInventory = GetComponent<PlayerInventory>();
             mouseLook.Init(transform,cam.transform);
             fPCrouch.Init(transform, characterController);
+            pickupWeapon.Init(transform,playerInventory);
         }
         protected virtual void Update()
         {
@@ -64,6 +68,9 @@ namespace UnrealFPS
         protected virtual void FixedUpdate()
         {
             if (lockMovement) return;
+
+            pickupWeapon.Handler();
+
             float speed;
             GetInput(out speed);
             if (true)

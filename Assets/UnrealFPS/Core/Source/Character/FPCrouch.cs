@@ -36,7 +36,10 @@ namespace UnrealFPS
             if (isCrouch)
                 fpHeight = wasControllerHeight * crouchHeight;
 
-
+            float lastFPHeight = characterController.height;
+            characterController.height = Mathf.Lerp(characterController.height, fpHeight, smooth * Time.deltaTime);
+            float fixedVerticalPosition = player.position.y + (characterController.height - lastFPHeight) / 2;
+            player.position = new Vector3(player.position.x, fixedVerticalPosition, player.position.z);
         }
         public float Speed
         {
