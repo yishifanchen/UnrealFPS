@@ -9,7 +9,6 @@
 using UnityEngine;
 using System;
 
-
 namespace UnrealFPS
 {
     [Serializable]
