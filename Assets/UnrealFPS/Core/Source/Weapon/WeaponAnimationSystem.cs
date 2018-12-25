@@ -27,6 +27,7 @@ namespace UnrealFPS
 
         private Animator animator;
         private CharacterController characterController;
+        private WeaponReloadSystem weaponReloadSystem;
         private PlayerInventory playerInventory;
         private Vector3 def;
         private Dictionary<string, bool> states;
@@ -36,6 +37,7 @@ namespace UnrealFPS
         private void Start()
         {
             animator = GetComponent<Animator>();
+            weaponReloadSystem = GetComponent<WeaponReloadSystem>();
             characterController = transform.root.GetComponent<CharacterController>();
             playerInventory = transform.root.GetComponent<PlayerInventory>();
             def = transform.localPosition;
@@ -46,7 +48,34 @@ namespace UnrealFPS
         }
         private void Update()
         {
-            
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)//按下上下左右键   跑
+            {
+                if (Input.GetKey(KeyCode.LeftShift) && Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") > 0)//按下跑，左右键没有按下，前键按下   走
+                {
+                    animator.SetInteger("Movement", 2);
+                    stateValue[2] = true;
+                    stateValue[1] = false;
+                }
+                else
+                {
+                    animator.SetInteger("Movement", 1);
+                    stateValue[1] = true;
+                    stateValue[2] = false;
+                    stateValue[0] = false;
+                }
+            }
+            else if (!Input.GetMouseButtonDown(0)&&!Input.GetButton("Jump")&&!stateValue[6])//站立
+            {
+                animator.SetInteger("Movement", 0);
+                stateValue[0] = true;
+                stateValue[1] = false;
+            }
+
+            //Fire
+            if (Input.GetButtonDown("Fire")&&!weaponReloadSystem.BulletsIsEmpty)
+            {
+                stateValue[3] = true;
+            }
         }
         /// <summary>
         /// Initializing the state
@@ -55,6 +84,7 @@ namespace UnrealFPS
         protected virtual string[] InitStates()
         {
             return new string[11] {"Idle", "Walk", "Run", "Fire", "Sight", "Reload", "Fall", "Jump", "TakeOut", "Crouch", "TakeUp" };
+            //站立，行走，跑，开火，瞄准，装弹，倒下，跳，扔下，蹲下，拿起
         }
         /// <summary>
         /// Current Active state
